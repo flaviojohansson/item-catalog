@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <section id="main-section">
-    {% for p in posts %}
-        {{ p.render(user) | safe}}
-    {% endfor %}
-    </section>
-{% endblock %}
