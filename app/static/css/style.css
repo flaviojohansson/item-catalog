@@ -1,0 +1,41 @@
+* {
+    font: normal 400 16px 'Lato', sans-serif;
+}
+
+body {
+    color: #2d3c49;
+}
+
+.footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  border-top: 1px solid #eee;
+}
+
+.header-btn {
+    padding-right: 15px;
+}
+
+.img-profile {
+    width: 40px;
+    height: 40px;
+}
+
+.row-centered {
+    text-align:center;
+}
+
+.col-centered {
+    display: inline-block;
+    float: none;
+    /* reset the text-align */
+    text-align: left;
+    /* inline-block space fix */
+    margin-right: -4px;
+}
+
+.col-fixed {
+    /* custom width */
+    width:320px;
+}
