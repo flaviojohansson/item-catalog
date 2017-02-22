@@ -4,7 +4,7 @@
     <section id="main-section">
     {% for handicraft in handicrafts %}
         <article>
-        Name: {{ handicraft.name }}<br>
+        Name: <a href="{{ url_for('handicraft.read_handicraft', handicraft_id=handicraft.id) }}">{{ handicraft.name }}</a><br>
         Category: {{ handicraft.category.name }}
         <br>
         Description: {{ handicraft.description }}
