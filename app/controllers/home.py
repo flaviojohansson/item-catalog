@@ -17,5 +17,5 @@ def front_page():
         Handicraft.created_at.desc()
     )
     # Show the latest 10
-    handicrafts = handicrafts.limit(10)
+    handicrafts = handicrafts.limit(30)
     return render_template('home/front_page.html', handicrafts=handicrafts)

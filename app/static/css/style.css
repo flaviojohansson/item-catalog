@@ -39,3 +39,9 @@ body {
     /* custom width */
     width:320px;
 }
+
+textarea {
+    height: 100px; 
+    min-height: 100px;  
+    max-height: 100px;
+}

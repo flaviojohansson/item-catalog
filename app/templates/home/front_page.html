@@ -7,7 +7,7 @@
         Name: <a href="{{ url_for('handicraft.read_handicraft', handicraft_id=handicraft.id) }}">{{ handicraft.name }}</a><br>
         Category: {{ handicraft.category.name }}
         <br>
-        Description: {{ handicraft.description }}
+        Description: {{ handicraft.description|striptags }}
         <br>
         Created by: {{ handicraft.user.name }}
         <hr>

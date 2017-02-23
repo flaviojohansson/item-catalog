@@ -115,10 +115,10 @@ def signout():
         del login_session['user_id']
         del login_session['provider']
 
-        flash('You have successfully been logged out')
+        flash('You have successfully been logged out', 'success')
         return redirect(url_for('home.front_page'))
     else:
-        flash('You were not logged in')
+        flash('You were not logged in', 'success')
         return redirect(url_for('home.front_page'))
 
 
@@ -184,7 +184,7 @@ def fbconnect():
     login_session['user_id'] = user_id
 
     output = login_session['username']
-    flash("Now logged in as %s" % login_session['username'])
+    flash("Now logged in as %s" % login_session['username'], 'success')
     return output
 
 
@@ -277,5 +277,5 @@ def gconnect():
     login_session['user_id'] = user_id
 
     output = login_session['username']
-    flash('Now logged in as {}'.format(login_session['username']))
+    flash('Now logged in as {}'.format(login_session['username']), 'success')
     return output
