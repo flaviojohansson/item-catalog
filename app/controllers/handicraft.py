@@ -75,7 +75,7 @@ def read_handicraft(handicraft_id):
     return render_template('handicraft/read.html', handicraft=handicraft)
 
 
-# Edit a handicraft
+# Edit AND Delete a handicraft
 @handicraft.route('/<int:handicraft_id>/update', methods=['GET', 'POST'])
 @login_required
 def update_handicraft(handicraft_id):
@@ -86,52 +86,41 @@ def update_handicraft(handicraft_id):
     #     return "<script>function myFunction() {alert('You are not authorized to edit this restaurant. Please create your own restaurant in order to edit.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
-        handicraft.name = request.form['name']
-        handicraft.description = request.form['description']
-        handicraft.category_id = request.form['category']
+        if ('action' in request.form) and (request.form['action'] == 'delete'):
+            session.delete(handicraft)
+            flash(u'Handicraft %s successfully deleted' % handicraft.name,
+                  'success')
+            # session.commit()
+            return redirect(url_for('home.front_page'))
+        else:
+            handicraft.name = request.form['name']
+            handicraft.description = request.form['description']
+            handicraft.category_id = request.form['category']
 
-        if not handicraft.name:
-            flash('Please give this handicraft a sweet name', 'error')
-        if not handicraft.description:
-            flash('Please tell more about your handicraft in the description', 'error')
-        if int(handicraft.category_id) <= 0:
-            flash('Please choose a category', 'error')
+            if not handicraft.name:
+                flash('Please give this handicraft a sweet name', 'error')
+            if not handicraft.description:
+                flash('Please tell more about your handicraft in the description', 'error')
+            if int(handicraft.category_id) <= 0:
+                flash('Please choose a category', 'error')
 
-        # Stop if there are flash messages
-        if '_flashes' in login_session:
-            categories = session.query(Category).all()
-            return render_template('handicraft/update.html',
-                                   handicraft=handicraft,
-                                   categories=categories)
+            # Stop if there are flash messages
+            if '_flashes' in login_session:
+                categories = session.query(Category).all()
+                return render_template('handicraft/update.html',
+                                       handicraft=handicraft,
+                                       categories=categories)
 
-        session.add(handicraft)
-        flash(u'Handicraft {} successfully updated'.format(handicraft.name), 'success')
-        session.commit()
+            session.add(handicraft)
+            flash(u'Handicraft {} successfully updated'.format(handicraft.name), 'success')
+            session.commit()
 
-        return redirect(url_for('handicraft.read_handicraft', handicraft_id=handicraft.id))
+            return redirect(url_for('handicraft.read_handicraft', handicraft_id=handicraft.id))
     else:
         categories = session.query(Category).all()
         return render_template('handicraft/update.html',
                                handicraft=handicraft,
                                categories=categories)
-
-
-# Delete a handicraft
-@handicraft.route('/<int:handicraft_id>/delete', methods=['GET', 'POST'])
-def delete_handicraft(handicraft_id):
-    restaurantToDelete = session.query(
-        Restaurant).filter_by(id=restaurant_id).one()
-    if 'username' not in login_session:
-        return redirect('/login')
-    if restaurantToDelete.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
-    if request.method == 'POST':
-        session.delete(restaurantToDelete)
-        flash('%s Successfully Deleted' % restaurantToDelete.name, 'success')
-        session.commit()
-        return redirect(url_for('front_page'))
-    else:
-        return render_template('handicraft/delete.html', restaurant=restaurantToDelete)
 
 
 # Show all categories
