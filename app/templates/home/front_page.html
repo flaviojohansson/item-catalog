@@ -4,10 +4,10 @@
     <section id="main-section">
     {% for handicraft in handicrafts %}
         <article>
-        Name: <a href="{{ url_for('handicraft.read_handicraft', handicraft_id=handicraft.id) }}">{{ handicraft.name }}</a><br>
+        Name: <a href="{{ url_for('handicraft.read_handicraft', handicraft_id=handicraft.id) }}">{{ handicraft.name | title }}</a><br>
         Category: {{ handicraft.category.name }}
         <br>
-        Description: {{ handicraft.description|striptags }}
+        Description: {{ handicraft.description | nl2br }}
         <br>
         Created by: {{ handicraft.user.name }}
         <hr>

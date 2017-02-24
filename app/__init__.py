@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from os import path
+from jinja2 import Markup
+
 # Blueprint
 from app.controllers.home import home
 from app.controllers.auth import auth
@@ -28,3 +30,10 @@ app.register_blueprint(handicraft, url_prefix='/handicraft')
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
+
+
+# Add a custom jinja filter that converts newlines to <br>
+@app.template_filter()
+def nl2br(value):
+    # Markup makes the value safe as in the filter safe
+    return Markup(value.replace('\n', '<br>'))

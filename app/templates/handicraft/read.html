@@ -6,7 +6,7 @@
         <article>
         <h1>Name: {{ handicraft.name }}</a></h1>
         <h2>Category: {{ handicraft.category.name }}</h2>
-        <h3>Description: {{ handicraft.description }}</h3>
+        <h3>Description: {{ handicraft.description | nl2br }}</h3>
         <br>
         Created by: {{ handicraft.user.name }}
         </article>
