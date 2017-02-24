@@ -26,7 +26,7 @@ handicraft = Blueprint('handicraft', __name__)
 #
 
 # Create a new handicraft to show the world
-@handicraft.route('/create/', methods=['GET', 'POST'])
+@handicraft.route('/create', methods=['GET', 'POST'])
 @login_required
 def create_handicraft():
     if request.method == 'POST':
@@ -69,7 +69,7 @@ def create_handicraft():
 
 
 # Show a handicraft
-@handicraft.route('/<int:handicraft_id>/')
+@handicraft.route('/<int:handicraft_id>')
 def read_handicraft(handicraft_id):
     handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
     return render_template('handicraft/read.html', handicraft=handicraft)

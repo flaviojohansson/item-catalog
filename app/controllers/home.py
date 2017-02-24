@@ -19,3 +19,15 @@ def front_page():
     # Show the latest 10
     handicrafts = handicrafts.limit(30)
     return render_template('home/front_page.html', handicrafts=handicrafts)
+
+
+@home.route('/list/category/<int:category_id>/')
+def list_by_category():
+
+    # handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
+    handicrafts = session.query(Handicraft) \
+                  .filter_by(category_id=category_id) \
+                  .order_by(Handicraft.created_at.desc())
+    # Show the latest 10
+    handicrafts = handicrafts.limit(30)
+    return render_template('home/front_page.html', handicrafts=handicrafts)
