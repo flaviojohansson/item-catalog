@@ -54,7 +54,7 @@ def create_handicraft():
 
         session.add(handicraft)
 
-        flash('New handicraft {} successfully created'.format(handicraft.name), 'success')
+        flash(u'New handicraft {} successfully created'.format(handicraft.name), 'success')
 
         session.commit()
 
@@ -105,7 +105,7 @@ def update_handicraft(handicraft_id):
                                    categories=categories)
 
         session.add(handicraft)
-        flash('Handicraft {} successfully updated'.format(handicraft.name), 'success')
+        flash(u'Handicraft {} successfully updated'.format(handicraft.name), 'success')
         session.commit()
 
         return redirect(url_for('handicraft.read_handicraft', handicraft_id=handicraft.id))
