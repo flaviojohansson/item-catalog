@@ -26,7 +26,7 @@ handicraft = Blueprint('handicraft', __name__)
 #
 
 # Create a new handicraft to show the world
-@handicraft.route('/create', methods=['GET', 'POST'])
+@handicraft.route('/create/', methods=['GET', 'POST'])
 @login_required
 def create_handicraft():
     if request.method == 'POST':
@@ -76,7 +76,7 @@ def read_handicraft(handicraft_id):
 
 
 # Edit AND Delete a handicraft
-@handicraft.route('/<int:handicraft_id>/update', methods=['GET', 'POST'])
+@handicraft.route('/<int:handicraft_id>/update/', methods=['GET', 'POST'])
 @login_required
 def update_handicraft(handicraft_id):
 
@@ -124,7 +124,7 @@ def update_handicraft(handicraft_id):
 
 
 # Show all categories
-@handicraft.route('/category/JSON')
+@handicraft.route('/category/JSON/')
 def category_JSON():
     categories = session.query(Category).order_by(Category.name).all()
     return jsonify(categories=[category.serialize for category in categories])

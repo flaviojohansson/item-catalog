@@ -4,16 +4,17 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy import create_engine
 import config
+import os
 
 
 Base = declarative_base()
 
-# We can't access app.config at this point
+new_database = os.path.isfile(
+    os.path.abspath(config.DATABASE_URI.split('///')[1])
+)
+
+# We can't access app.config at this point, so we import config
 engine = create_engine(config.DATABASE_URI)
-
-# First time create database
-# Base.metadata.create_all(engine)
-
 
 # Connect to Database
 Base.metadata.bind = engine

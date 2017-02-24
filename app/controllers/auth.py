@@ -84,7 +84,7 @@ def gdisconnect():
 
 
 @auth.route('/')
-@auth.route('/signin')
+@auth.route('/signin/')
 def signin():
     '''Show login page to the user
     Create anti-forgery state token
@@ -95,7 +95,7 @@ def signin():
     return render_template('auth/login.html', state=state)
 
 
-@auth.route('/signout')
+@auth.route('/signout/')
 def signout():
     'Disconnect based on provider'
     if 'provider' in login_session:

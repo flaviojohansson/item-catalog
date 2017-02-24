@@ -1,5 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, DateTime, String, Numeric
+from sqlalchemy.orm import relationship
+from datetime import datetime
 from base import Base
+from handicraft import Handicraft
 
 
 class HandicraftPicture(Base):

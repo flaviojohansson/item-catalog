@@ -1,15 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+    {% if category %}
+    <div class="well">Filter by category: {{ category.name }}</div>    
+    {% endif %}
+    {% if user %}
+    <div class="well">Filter by user: {{ user.name }}</div>    
+    {% endif %}
+
     <section id="main-section">
     {% for handicraft in handicrafts %}
         <article>
         Name: <a href="{{ url_for('handicraft.read_handicraft', handicraft_id=handicraft.id) }}">{{ handicraft.name | title }}</a><br>
-        Category: {{ handicraft.category.name }}
+        Category: <a href="{{ url_for('home.list_by_category', category_id=handicraft.category_id) }}">{{ handicraft.category.name }}</a>
         <br>
         Description: {{ handicraft.description | nl2br }}
         <br>
-        Created by: {{ handicraft.user.name }}
+        Created by: <a href="{{ url_for('home.list_by_user', user_id=handicraft.user_id) }}">{{ handicraft.user.name }}</a>
         <hr>
         </article>
     {% endfor %}
