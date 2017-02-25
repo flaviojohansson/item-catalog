@@ -18,6 +18,13 @@
         Description: {{ handicraft.description | nl2br }}
         <br>
         Created by: <a href="{{ url_for('home.list_by_user', user_id=handicraft.user_id) }}">{{ handicraft.user.name }}</a>
+
+        <p>
+            <span class="glyphicon glyphicon-time"></span> Last modified at {{handicraft.updated_at.strftime("%b %d %Y @ %I:%M%p")}}.
+        </p>
+        {% if ('user_id' in session) and (handicraft.user_id == session['user_id'] )%}
+        <a role="button" role="button" class="btn navbar-btn btn-primary" href="{{url_for('handicraft.update_handicraft', handicraft_id=handicraft.id)}}">Edit this</a>
+        {% endif %}
         <hr>
         </article>
     {% endfor %}
