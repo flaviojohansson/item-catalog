@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from os import path
 from jinja2 import Markup
+from flask_wtf.csrf import CSRFProtect
 
 # Blueprint
 from app.controllers.home import home
@@ -25,6 +26,7 @@ app.register_blueprint(home)
 app.register_blueprint(auth, url_prefix='/auth')
 app.register_blueprint(handicraft, url_prefix='/handicraft')
 
+csrf = CSRFProtect(app)
 
 # Sample HTTP error handling
 @app.errorhandler(404)
