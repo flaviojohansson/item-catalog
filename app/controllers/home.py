@@ -23,7 +23,7 @@ def front_page():
     return render_template('home/front_page.html', handicrafts=handicrafts)
 
 
-@home.route('/list/category/<int:category_id>')
+@home.route('/filter/category/<int:category_id>')
 def list_by_category(category_id):
     # with first() category will be None if no rows found
     category = session.query(Category).filter_by(id=category_id).first()
@@ -39,7 +39,7 @@ def list_by_category(category_id):
                            category=category)
 
 
-@home.route('/list/user/<int:user_id>')
+@home.route('/filter/user/<int:user_id>')
 def list_by_user(user_id):
     # with first() user will be None if no rows found
     user = session.query(User).filter_by(id=user_id).first()
