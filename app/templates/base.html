@@ -27,6 +27,10 @@
                 <div class="navbar-header pull-right">
 
                 {% if session.username %}
+                    <a role="button" class="btn navbar-btn btn-default" href="{{url_for('handicraft.create_handicraft')}}"
+                        alt="asdasd">
+                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                    </a>
                     <a role="button" class="btn navbar-btn btn-primary" href="{{url_for('auth.signout')}}">Sign out</a>
                     {{session.username | title}}
                     <img class="img-circle img-profile" src="{{session.picture}}">
@@ -64,10 +68,6 @@
                 </div>
             {% endif %}
         {% endwith %}
-
-        {% if session.username %}
-        <a role="button" class="btn navbar-btn btn-primary" href="{{url_for('handicraft.create_handicraft')}}">Create new handicraft</a>
-        {% endif %}
 
         {% block content %}
         {% endblock %}
