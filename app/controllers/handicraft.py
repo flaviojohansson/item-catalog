@@ -121,10 +121,3 @@ def update_handicraft(handicraft_id):
         return render_template('handicraft/update.html',
                                handicraft=handicraft,
                                categories=categories)
-
-
-# Show all categories
-@handicraft.route('/category/JSON/')
-def category_JSON():
-    categories = session.query(Category).order_by(Category.name).all()
-    return jsonify(categories=[category.serialize for category in categories])

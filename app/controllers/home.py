@@ -68,3 +68,10 @@ def list_by_user(user_id):
                            handicrafts=handicrafts,
                            user=user,
                            categories=categories)
+
+
+# Show all categories
+@home.route('/category/JSON/')
+def category_JSON():
+    categories = session.query(Category).order_by(Category.name).all()
+    return jsonify(categories=[category.serialize for category in categories])
