@@ -2,31 +2,47 @@
 
 {% block content %}
 
-    {% if category %}
-    <div class="well">Filter by category: {{ category.name }}</div>    
-    {% endif %}
-    {% if user %}
-    <div class="well">Filter by user: {{ user.name }}</div>    
-    {% endif %}
+    <div class="row">
 
-    <section id="main-section">
-    {% for handicraft in handicrafts %}
-        <article>
-        Name: <a href="{{ url_for('handicraft.read_handicraft', handicraft_id=handicraft.id) }}">{{ handicraft.name | title }}</a><br>
-        Category: <a href="{{ url_for('home.list_by_category', category_id=handicraft.category_id) }}">{{ handicraft.category.name }}</a>
-        <br>
-        Description: {{ handicraft.description | nl2br }}
-        <br>
-        Created by: <a href="{{ url_for('home.list_by_user', user_id=handicraft.user_id) }}">{{ handicraft.user.name }}</a>
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">Categories</div>
+                <div class="panel-body">
+                    {% for category in categories %}
+                    <a href="{{url_for('home.list_by_category', category_id=category.id)}}">{{ category.name }}</a><br />
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-        <p>
-            <span class="glyphicon glyphicon-time"></span> Last modified at {{handicraft.updated_at.strftime("%b %d %Y @ %I:%M%p")}}.
-        </p>
-        {% if ('user_id' in session) and (handicraft.user_id == session['user_id'] )%}
-        <a role="button" role="button" class="btn navbar-btn btn-primary" href="{{url_for('handicraft.update_handicraft', handicraft_id=handicraft.id)}}">Edit this</a>
-        {% endif %}
-        <hr>
-        </article>
-    {% endfor %}
-    </section>
+        <div class="col-sm-9">
+            {% if category %}
+            <div class="well">Filter by category: {{ category.name }}</div>    
+            {% endif %}
+            {% if user %}
+            <div class="well">Filter by user: {{ user.name }}</div>    
+            {% endif %}
+
+            <section id="main-section">
+            {% for handicraft in handicrafts %}
+                <article>
+                Name: <a href="{{ url_for('handicraft.read_handicraft', handicraft_id=handicraft.id) }}">{{ handicraft.name | title }}</a><br>
+                Category: <a href="{{ url_for('home.list_by_category', category_id=handicraft.category_id) }}">{{ handicraft.category.name }}</a>
+                <br>
+                Description: {{ handicraft.description | nl2br }}
+                <br>
+                Created by: <a href="{{ url_for('home.list_by_user', user_id=handicraft.user_id) }}">{{ handicraft.user.name }}</a>
+
+                <p>
+                    <span class="glyphicon glyphicon-time"></span> Last modified at {{handicraft.updated_at.strftime("%b %d %Y @ %I:%M%p")}}.
+                </p>
+                {% if ('user_id' in session) and (handicraft.user_id == session['user_id'] )%}
+                <a role="button" role="button" class="btn navbar-btn btn-primary" href="{{url_for('handicraft.update_handicraft', handicraft_id=handicraft.id)}}">Edit this</a>
+                {% endif %}
+                <hr>
+                </article>
+            {% endfor %}
+            </section>
+        </div>
+    </div>
 {% endblock %}

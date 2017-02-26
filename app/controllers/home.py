@@ -18,9 +18,16 @@ def front_page():
     handicrafts = session.query(Handicraft).order_by(
         Handicraft.created_at.desc()
     )
+
+    categories = session.query(Category).order_by(
+        Category.name.desc()
+    )
+
     # Show the latest 10
     handicrafts = handicrafts.limit(30)
-    return render_template('home/front_page.html', handicrafts=handicrafts)
+    return render_template('home/front_page.html',
+                           handicrafts=handicrafts,
+                           categories=categories)
 
 
 @home.route('/filter/category/<int:category_id>')
@@ -29,6 +36,9 @@ def list_by_category(category_id):
     category = session.query(Category).filter_by(id=category_id).first()
     if not category:
         return redirect(url_for('home.front_page'))
+    categories = session.query(Category).order_by(
+        Category.name.desc()
+    )
     handicrafts = session.query(Handicraft) \
         .filter_by(category_id=category_id) \
         .order_by(Handicraft.created_at.desc())
@@ -36,7 +46,8 @@ def list_by_category(category_id):
     handicrafts = handicrafts.limit(30)
     return render_template('home/front_page.html',
                            handicrafts=handicrafts,
-                           category=category)
+                           category=category,
+                           categories=categories)
 
 
 @home.route('/filter/user/<int:user_id>')
@@ -45,7 +56,9 @@ def list_by_user(user_id):
     user = session.query(User).filter_by(id=user_id).first()
     if not user:
         return redirect(url_for('home.front_page'))
-    # handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
+    categories = session.query(Category).order_by(
+        Category.name.desc()
+    )
     handicrafts = session.query(Handicraft) \
         .filter_by(user_id=user_id) \
         .order_by(Handicraft.created_at.desc())
@@ -53,4 +66,5 @@ def list_by_user(user_id):
     handicrafts = handicrafts.limit(30)
     return render_template('home/front_page.html',
                            handicrafts=handicrafts,
-                           user=user)
+                           user=user,
+                           categories=categories)
