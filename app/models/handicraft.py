@@ -12,7 +12,6 @@ class Handicraft(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(80), nullable=False)
     description = Column(String(250))
-    price = Column(Numeric(precision=2))
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     category_id = Column(Integer, ForeignKey('category.id'))
@@ -27,6 +26,6 @@ class Handicraft(Base):
             'name': self.name,
             'description': self.description,
             'id': self.id,
-            'price': self.price,
-            'course': self.course,
+            'user': self.user.name,
+            'category': self.category.name
         }

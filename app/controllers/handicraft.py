@@ -75,6 +75,13 @@ def read_handicraft(handicraft_id):
     return render_template('handicraft/read.html', handicraft=handicraft)
 
 
+# Show a handicraft in JSON format
+@handicraft.route('/<int:handicraft_id>/JSON/')
+def read_handicraft_JSON(handicraft_id):
+    handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
+    return jsonify(handicraft=[handicraft.serialize])
+
+
 # Edit AND Delete a handicraft
 @handicraft.route('/<int:handicraft_id>/update/', methods=['GET', 'POST'])
 @login_required
