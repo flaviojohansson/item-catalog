@@ -19,7 +19,7 @@ var startApp = function() {
     gapi.load("auth2", function(){
         // Retrieve the singleton for the GoogleAuth library and set up the client.
         auth2 = gapi.auth2.init({
-            client_id:"328130915744-g47t1at3f3hr24enpphl79p7k5ddsg6j.apps.googleusercontent.com",
+            client_id:google_client_id,
             //redirecturi:"postmessage",
             //accesstype:"offline",
             cookie_policy:"single_host_origin",
@@ -70,7 +70,7 @@ function signInCallback(authResult) {
 
 window.fbAsyncInit = function() {
     FB.init({
-        appId : "189110568238005",
+        appId : facebook_client_id,
         cookie : true,  // enable cookies to allow the server to access 
         // the session
         xfbml : true,  // parse social plugins on this page

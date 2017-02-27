@@ -15,9 +15,13 @@ import requests
 from app.models.base import session
 from app.models.handicraft import User
 
-CLIENT_ID = json.loads(
+GOOGLE_CLIENT_ID = json.loads(
     open('app/config/google_client_secret.json', 'r').read()
     )['web']['client_id']
+
+FACEBOOK_CLIENT_ID = json.loads(
+    open('app/config/fb_client_secret.json', 'r').read()
+    )['web']['app_id']
 
 
 auth = Blueprint('auth', __name__)
@@ -92,7 +96,10 @@ def signin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
-    return render_template('auth/login.html', state=state)
+    return render_template('auth/login.html',
+                           state=state,
+                           google_client_id=GOOGLE_CLIENT_ID,
+                           facebook_client_id=FACEBOOK_CLIENT_ID)
 
 
 @auth.route('/signout/')
@@ -184,7 +191,7 @@ def fbconnect():
     login_session['user_id'] = user_id
 
     output = login_session['username']
-    flash("Now logged in as %s" % login_session['username'], 'success')
+    flash(u'Now logged in as %s' % login_session['username'], 'success')
     return output
 
 
@@ -236,7 +243,7 @@ def gconnect():
         return response
 
     # Verify that the access token is valid for this app.
-    if result['issued_to'] != CLIENT_ID:
+    if result['issued_to'] != GOOGLE_CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
         print "Token's client ID does not match app's."
@@ -277,5 +284,5 @@ def gconnect():
     login_session['user_id'] = user_id
 
     output = login_session['username']
-    flash('Now logged in as {}'.format(login_session['username']), 'success')
+    flash(u'Now logged in as {}'.format(login_session['username']), 'success')
     return output
