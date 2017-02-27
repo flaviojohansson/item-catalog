@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import session as login_session
 from flask import request, redirect, url_for
+from urlparse import urlparse
 
 
 def login_required(func):
@@ -10,7 +11,10 @@ def login_required(func):
     @wraps(func)
     def func_wrapper(*args, **kwargs):
         if 'username' not in login_session:
-            return redirect(url_for('auth.signin', redirect=request.url))
+            # use flask session, no cookies or url parameters needed
+            url = urlparse(request.url)
+            login_session['redirect'] = ''.join([url.path, url.params])
+            return redirect(url_for('auth.signin'))
         return func(*args, **kwargs)  # Carry on
 
     return func_wrapper

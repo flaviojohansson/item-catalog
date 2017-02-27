@@ -81,6 +81,17 @@ def front_page():
                            categories=categories)
 
 
+# Show the last handicrafts
+@home.route('/signedin')
+def signedin():
+    # session redirect is set at login decorators, so after sucessfully
+    # signing in, the user is redirected here. This way we avoid cookies
+    if 'redirect' in login_session:
+        uri = login_session['redirect']
+        del login_session['redirect']  # clean session value
+        return redirect(uri)
+    return redirect(url_for('home.front_page'))
+
 # Show the last 30 handicrafts, in JSON format
 @home.route('/JSON/')
 def front_page_JSON():

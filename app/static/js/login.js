@@ -50,7 +50,7 @@ function signInCallback(authResult) {
                     console.log("Successful login for: " + result);
                     $("#result").html("Login Successful, " + result + ". Redirecting...");
                     setTimeout(function() {
-                        window.location.href = "/";
+                        window.location.href = "/signedin";
                     }, 100);
                 } else {
                     if (authResult["error"])
@@ -111,7 +111,7 @@ function fb_login(){
                         if (result) {
                             $("#result").html("Login Successful, " + result + ". Redirecting...")
                             setTimeout(function() {
-                                window.location.href = "/";
+                                window.location.href = "/signedin";
                             }, 100);
                         } else {
                             $("#result").html("Failed to make a server-side call. Check your configuration and console.");
