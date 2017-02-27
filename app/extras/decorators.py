@@ -2,6 +2,8 @@ from functools import wraps
 from flask import session as login_session
 from flask import request, redirect, url_for
 from urlparse import urlparse
+from app.models.base import session
+from app.models.handicraft import Handicraft
 
 
 def login_required(func):
@@ -20,53 +22,35 @@ def login_required(func):
     return func_wrapper
 
 
-def check_if_valid(class_name):
-    '''Make sure the entity exists, based on class_name and
-    the last method parameter
-     Parameter:
-        class_name: Datamodel name. e.g: Post, Comment'''
+def must_exist(func):
+    '''Make sure the handicraft exists otherwise redirect the user'''
 
-    def wrapper(func):
-        def func_wrapper(self, *args):
-            # Always the last parameter. Being post or comment
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
+        handicraft = session.query(Handicraft).filter_by(
+            id=kwargs['handicraft_id']
+        ).first()
 
-            # entity_id = args[-1]
-            # key = db.Key.from_path(class_name, int(entity_id))
-            # entity = db.get(key)
+        if not handicraft:
+            return redirect(url_for('home.front_page'))
+        return func(*args, **kwargs)  # Carry on
 
-            # if entity:
-            #     func(self, *args)  # Carry on
-            # else:
-            #     self.redirect('/')  # Smoothly goes to main page
-            #     return
-            func(self, *args)  # Carry on
-
-        return func_wrapper
-    return wrapper
+    return func_wrapper
 
 
-def check_if_owner(class_name):
-    '''Make sure the logged user is the owner of the entity
-    Parameter:
-        class_name: Datamodel name. e.g: Post, Comment'''
+def must_be_owner(func):
+    '''Make sure the the user logged is the owner of the handicraft.
+    Assumes user is logged and the handicraft exists'''
 
-    def wrapper(func):
-        def func_wrapper(self, *args):
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
+        handicraft = session.query(Handicraft).filter_by(
+            id=kwargs['handicraft_id']
+        ).first()
 
-            # # Always the last parameter. Being post or comment
-            # entity_id = args[-1]
-            # # In the other hand, the post_id is always the first
-            # post_id = args[0]
-            # key = db.Key.from_path(class_name, int(entity_id))
-            # entity = db.get(key)
-            # if self.user.key() == entity.user.key():
-            #     func(self, *args)  # Carry on
-            # else:
-            #     # Always back to the related Post page, even for comments
-            #     self.redirect('/post/%s' % str(post_id))
-            #     return
+        if login_session['user_id'] != handicraft.user_id:
+            return redirect(url_for('handicraft.read_handicraft',
+                                    handicraft_id=handicraft.id))
+        return func(*args, **kwargs)  # Carry on
 
-            func(self, *args)  # Carry on
-
-        return func_wrapper
-    return wrapper
+    return func_wrapper

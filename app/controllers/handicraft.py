@@ -12,7 +12,7 @@ import json
 from flask import make_response
 import requests
 
-from app.extras.decorators import login_required
+from app.extras.decorators import login_required, must_exist, must_be_owner
 from app.models.base import session
 from app.models.handicraft import Handicraft
 from app.models.category import Category
@@ -20,10 +20,6 @@ from app.models.category import Category
 
 handicraft = Blueprint('handicraft', __name__)
 
-
-#
-# Handicraft operations
-#
 
 # Create a new handicraft to show the world
 @handicraft.route('/create/', methods=['GET', 'POST'])
@@ -70,6 +66,7 @@ def create_handicraft():
 
 # Show a handicraft
 @handicraft.route('/<int:handicraft_id>')
+@must_exist
 def read_handicraft(handicraft_id):
     handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
     return render_template('handicraft/read.html', handicraft=handicraft)
@@ -77,6 +74,7 @@ def read_handicraft(handicraft_id):
 
 # Show a handicraft in JSON format
 @handicraft.route('/<int:handicraft_id>/JSON/')
+@must_exist
 def read_handicraft_JSON(handicraft_id):
     handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
     return jsonify(handicraft=[handicraft.serialize])
@@ -85,19 +83,18 @@ def read_handicraft_JSON(handicraft_id):
 # Edit AND Delete a handicraft
 @handicraft.route('/<int:handicraft_id>/update/', methods=['GET', 'POST'])
 @login_required
+@must_exist
+@must_be_owner
 def update_handicraft(handicraft_id):
 
     handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
-
-    # if editedRestaurant.user_id != login_session['user_id']:
-    #     return "<script>function myFunction() {alert('You are not authorized to edit this restaurant. Please create your own restaurant in order to edit.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
         if ('action' in request.form) and (request.form['action'] == 'delete'):
             session.delete(handicraft)
             flash(u'Handicraft %s successfully deleted' % handicraft.name,
                   'success')
-            # session.commit()
+            session.commit()
             return redirect(url_for('home.front_page'))
         else:
             handicraft.name = request.form['name']

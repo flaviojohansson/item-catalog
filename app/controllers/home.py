@@ -92,6 +92,7 @@ def signedin():
         return redirect(uri)
     return redirect(url_for('home.front_page'))
 
+
 # Show the last 30 handicrafts, in JSON format
 @home.route('/JSON/')
 def front_page_JSON():
