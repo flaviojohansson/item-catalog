@@ -3,6 +3,8 @@
 {% block content %}
     <form class="form-group" method="post">
 
+        <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+
         {% block title %}
         {% endblock %}
 
