@@ -40,7 +40,7 @@ function signInCallback(authResult) {
         // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main page
         $.ajax({
             type: "POST",
-            url: "/auth/gconnect?state=" + state,
+            url: "/auth/gconnect?state=" + state + "&_csrf_token=" + csrf_token,
             processData: false,
             data: authResult["code"],
             contentType: "application/octet-stream; charset=utf-8",
@@ -97,12 +97,11 @@ function fb_login(){
 
             // Hide the sign-in button now that the user is authorized
             // $("#facebookSigninButton").attr("style", "display: none");
-
             FB.api("/me", function(response) {
                 console.log("Successful login for: " + response.name);
                 $.ajax({
                     type: "POST",
-                    url: "/auth/fbconnect?state=" + state,
+                    url: "/auth/fbconnect?state=" + state + "&_csrf_token=" + csrf_token,
                     processData: false,
                     data: access_token,
                     contentType: "application/octet-stream; charset=utf-8",
