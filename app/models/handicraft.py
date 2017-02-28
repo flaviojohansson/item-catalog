@@ -18,6 +18,7 @@ class Handicraft(Base):
     category = relationship(Category)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
+    pictures = relationship("HandicraftPicture", back_populates="handicraft")
 
     @property
     def serialize(self):

@@ -3,18 +3,23 @@ from flask import jsonify, url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from flask import session as login_session
+from flask import send_from_directory
 import random
 import string
+import config
+import os
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
 import json
 from flask import make_response
 import requests
+from werkzeug.utils import secure_filename
 
 from app.extras.decorators import login_required, must_exist, must_be_owner
 from app.models.base import session
 from app.models.handicraft import Handicraft
+from app.models.handicraft_picture import HandicraftPicture
 from app.models.category import Category
 
 
@@ -69,7 +74,8 @@ def create_handicraft():
 @must_exist
 def read_handicraft(handicraft_id):
     handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
-    return render_template('handicraft/read.html', handicraft=handicraft)
+    return render_template('handicraft/read.html',
+                           handicraft=handicraft)
 
 
 # Show a handicraft in JSON format
@@ -88,6 +94,7 @@ def read_handicraft_JSON(handicraft_id):
 def update_handicraft(handicraft_id):
 
     handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
+    categories = session.query(Category).all()
 
     if request.method == 'POST':
         if ('action' in request.form) and (request.form['action'] == 'delete'):
@@ -110,7 +117,6 @@ def update_handicraft(handicraft_id):
 
             # Stop if there are flash messages
             if '_flashes' in login_session:
-                categories = session.query(Category).all()
                 return render_template('handicraft/update.html',
                                        handicraft=handicraft,
                                        categories=categories)
@@ -121,7 +127,54 @@ def update_handicraft(handicraft_id):
 
             return redirect(url_for('handicraft.read_handicraft', handicraft_id=handicraft.id))
     else:
-        categories = session.query(Category).all()
         return render_template('handicraft/update.html',
                                handicraft=handicraft,
                                categories=categories)
+
+
+@handicraft.route('/picture/<string:file_name>', methods=['GET'])
+def read_image(file_name):
+    return send_from_directory(os.path.join(config.UPLOAD_FOLDER), file_name)
+
+
+# Helper function 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in config.ALLOWED_EXTENSIONS
+
+
+# Upload OR Delete a picture to some handicraft
+# As seen at http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
+# The ideal would be upload using HTML5 and stuff...
+@handicraft.route('/<int:handicraft_id>/picture/', methods=['POST'])
+@login_required
+@must_exist
+@must_be_owner
+def upload_image(handicraft_id):
+    if request.method == 'POST':
+
+        handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
+
+        if ('image' not in request.files) or (request.files['image'].filename == ''):
+            flash('Please choose a picture to import', 'error')
+
+        image = request.files['image']
+        file_name = secure_filename(image.filename)
+
+        # Stop if there are flash messages
+        if '_flashes' not in login_session:
+            if image and allowed_file(image.filename):
+                full_path = os.path.join(
+                                config.UPLOAD_FOLDER,
+                                secure_filename(file_name))
+                image.save(full_path)
+
+                handicraft_picture = HandicraftPicture(
+                    file_name=file_name,
+                    handicraft_id=handicraft.id)
+
+                session.add(handicraft_picture)
+                session.commit()
+
+        return redirect(url_for('handicraft.update_handicraft',
+                                handicraft_id=handicraft.id))

@@ -29,4 +29,23 @@
         <a role="button" class="btn btn-default" href="{{ url_for('handicraft.read_handicraft', handicraft_id=handicraft.id) }}">Cancel</a>
         <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-danger pull-right">Delete</button>
 
+    </form>
+    
+    <form class="form-group" method="post" action="{{url_for('handicraft.upload_image', handicraft_id=handicraft.id)}}" enctype=multipart/form-data>
+
+        <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+
+        <div class="form-group">
+            <label class="control-label" for="image">Image</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+        <button type="submit" class="btn btn-primary">Send picture</button>
+
+    </form>
+    {% for picture in handicraft.pictures %}
+    <img class="img-responsive" src="{{url_for('handicraft.read_image', file_name=picture.file_name)}}">
+    <br />
+    {% endfor %}
+
 {% endblock %}
+
