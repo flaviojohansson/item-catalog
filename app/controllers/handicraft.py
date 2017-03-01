@@ -8,6 +8,7 @@ import random
 import string
 import config
 import os
+import uuid
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -158,7 +159,13 @@ def upload_image(handicraft_id):
         flash('Please choose a picture to import', 'error')
 
     image = request.files['image']
-    file_name = secure_filename(image.filename)
+
+    # Give the new file a unique name
+    file_name = ''.join([
+            str(uuid.uuid4()),
+            os.path.splitext(image.filename)[-1]])
+
+    print file_name
 
     # Stop if there are flash messages
     if '_flashes' not in login_session:
