@@ -2,7 +2,9 @@ from flask import Flask, render_template, request, abort, session
 from flask_debugtoolbar import DebugToolbarExtension
 from os import path
 from jinja2 import Markup
-import random, string
+import random
+import string
+import os
 
 # Blueprint
 from app.controllers.home import home
@@ -20,6 +22,11 @@ app = Flask('TheHandicrafter',
 app.config.from_pyfile('config.py')
 
 # toolbar = DebugToolbarExtension(app)
+
+# Upload folder is not at github, so create here if needed
+uploads_folder = path.join(path.abspath(app.config['UPLOAD_FOLDER']))
+if not path.exists(uploads_folder):
+    os.mkdir(uploads_folder)
 
 # Register all blueprints
 app.register_blueprint(home)
