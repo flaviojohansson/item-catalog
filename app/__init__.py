@@ -18,7 +18,6 @@ app = Flask('TheHandicrafter',
             template_folder=template_folder,
             static_folder=static_folder)
 
-
 app.config.from_pyfile('config.py')
 
 # toolbar = DebugToolbarExtension(app)

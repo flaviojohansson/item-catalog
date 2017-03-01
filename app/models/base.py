@@ -9,10 +9,6 @@ import os
 
 Base = declarative_base()
 
-new_database = os.path.isfile(
-    os.path.abspath(config.DATABASE_URI.split('///')[1])
-)
-
 # We can't access app.config at this point, so we import config
 engine = create_engine(config.DATABASE_URI)
 
