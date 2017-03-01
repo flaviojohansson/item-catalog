@@ -73,7 +73,7 @@
 
     {% for picture in handicraft.pictures | sort(attribute='created_at', reverse=True) %}
     <img class="img-responsive" src="{{url_for('handicraft.read_image', file_name=picture.file_name)}}">
-    <button type="button" onclick="changeAction(this)" handicraft-id="{{url_for('handicraft.delete_image', handicraft_id=handicraft.id, handicraft_picture_id=picture.id)}}" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger">Delete picture</button>
+    <button type="button" onclick="changeAction(this)" handicraft-id="{{url_for('handicraft.delete_image', handicraft_id=handicraft.id, picture_id=picture.id)}}" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger">Delete picture</button>
     <br /><br />
     {% endfor %}
 

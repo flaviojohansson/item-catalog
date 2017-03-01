@@ -179,15 +179,15 @@ def upload_image(handicraft_id):
                             handicraft_id=handicraft.id))
 
 
-@handicraft.route('/<int:handicraft_id>/picture/<int:handicraft_picture_id>',
+@handicraft.route('/<int:handicraft_id>/picture/<int:picture_id>/delete',
                   methods=['POST'])
 @login_required
 @must_exist
 @must_be_owner
-def delete_image(handicraft_id, handicraft_picture_id):
+def delete_image(handicraft_id, picture_id):
 
     handicraft_picture = session.query(HandicraftPicture).filter_by(
-        id=handicraft_picture_id,
+        id=picture_id,
         handicraft_id=handicraft_id).first()
 
     if handicraft_picture:
