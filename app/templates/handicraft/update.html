@@ -42,7 +42,8 @@
         <button type="submit" class="btn btn-primary">Send picture</button>
 
     </form>
-    {% for picture in handicraft.pictures %}
+
+    {% for picture in handicraft.pictures | sort(attribute='created_at', reverse=True)%}
     <img class="img-responsive" src="{{url_for('handicraft.read_image', file_name=picture.file_name)}}">
     <br />
     {% endfor %}

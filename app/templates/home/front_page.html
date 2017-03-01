@@ -40,9 +40,11 @@
                 <a role="button" role="button" class="btn navbar-btn btn-primary" href="{{url_for('handicraft.update_handicraft', handicraft_id=handicraft.id)}}">Edit this</a>
                 {% endif %}
     
-                {% for picture in handicraft.pictures[-1:] %}
+                {% for picture in handicraft.pictures | sort(attribute='created_at', reverse=True) %}
+                {% if loop.index == 1 %}
                 <img class="img-responsive" src="{{url_for('handicraft.read_image', file_name=picture.file_name)}}">
                 <br />
+                {% endif %}
                 {% endfor %}
                 <hr>
                 </article>
