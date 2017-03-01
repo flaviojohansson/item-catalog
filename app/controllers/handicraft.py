@@ -199,6 +199,10 @@ def delete_image(handicraft_id, picture_id):
 
     if handicraft_picture:
         if ('action' in request.form) and (request.form['action'] == 'delete'):
+            # Delete the file
+            os.remove(os.path.join(config.UPLOAD_FOLDER,
+                                   handicraft_picture.file_name))
+            # Delete the registry in the database
             session.delete(handicraft_picture)
             flash(u'Picture successfully deleted', 'success')
             session.commit()
