@@ -151,30 +151,50 @@ def allowed_file(filename):
 @must_exist
 @must_be_owner
 def upload_image(handicraft_id):
-    if request.method == 'POST':
 
-        handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
+    handicraft = session.query(Handicraft).filter_by(id=handicraft_id).one()
 
-        if ('image' not in request.files) or (request.files['image'].filename == ''):
-            flash('Please choose a picture to import', 'error')
+    if ('image' not in request.files) or (request.files['image'].filename == ''):
+        flash('Please choose a picture to import', 'error')
 
-        image = request.files['image']
-        file_name = secure_filename(image.filename)
+    image = request.files['image']
+    file_name = secure_filename(image.filename)
 
-        # Stop if there are flash messages
-        if '_flashes' not in login_session:
-            if image and allowed_file(image.filename):
-                full_path = os.path.join(
-                                config.UPLOAD_FOLDER,
-                                secure_filename(file_name))
-                image.save(full_path)
+    # Stop if there are flash messages
+    if '_flashes' not in login_session:
+        if image and allowed_file(image.filename):
+            full_path = os.path.join(
+                            config.UPLOAD_FOLDER,
+                            secure_filename(file_name))
+            image.save(full_path)
 
-                handicraft_picture = HandicraftPicture(
-                    file_name=file_name,
-                    handicraft_id=handicraft.id)
+            handicraft_picture = HandicraftPicture(
+                file_name=file_name,
+                handicraft_id=handicraft.id)
 
-                session.add(handicraft_picture)
-                session.commit()
+            session.add(handicraft_picture)
+            session.commit()
 
-        return redirect(url_for('handicraft.update_handicraft',
-                                handicraft_id=handicraft.id))
+    return redirect(url_for('handicraft.update_handicraft',
+                            handicraft_id=handicraft.id))
+
+
+@handicraft.route('/<int:handicraft_id>/picture/<int:handicraft_picture_id>',
+                  methods=['POST'])
+@login_required
+@must_exist
+@must_be_owner
+def delete_image(handicraft_id, handicraft_picture_id):
+
+    handicraft_picture = session.query(HandicraftPicture).filter_by(
+        id=handicraft_picture_id,
+        handicraft_id=handicraft_id).first()
+
+    if handicraft_picture:
+        if ('action' in request.form) and (request.form['action'] == 'delete'):
+            session.delete(handicraft_picture)
+            flash(u'Picture successfully deleted', 'success')
+            session.commit()
+
+    return redirect(url_for('handicraft.update_handicraft',
+                            handicraft_id=handicraft_id))
