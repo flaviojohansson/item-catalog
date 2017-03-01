@@ -42,6 +42,7 @@
     
                 {% for picture in handicraft.pictures | sort(attribute='created_at', reverse=True) %}
                 {% if loop.index == 1 %}
+                {# Show only the first picture #}
                 <img class="img-responsive" src="{{url_for('handicraft.read_image', file_name=picture.file_name)}}">
                 <br />
                 {% endif %}
