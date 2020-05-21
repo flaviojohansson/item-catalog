@@ -1,4 +1,4 @@
-Flask==0.12
+Flask==1.0
 Flask_DebugToolbar==0.10.1
 requests==2.12.4
 SQLAlchemy==1.1.4
